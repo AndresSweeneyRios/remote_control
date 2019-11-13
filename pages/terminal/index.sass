@@ -1,0 +1,48 @@
+*, *::before, *::after
+    margin: 0
+    padding: 0
+    box-sizing: border-box
+    font-family: 'PT Mono', monospace
+    font-size: 14px !important
+
+@keyframes blink
+    0%
+        background-color: transparent
+
+    50%
+        background-color: white
+
+.terminal
+    background-color: black
+    width: 100vw
+    height: 100vh
+    font-family: monospace
+    color: white
+    padding: 10px
+    overflow: auto
+    scrollbar-width: thin
+    scrollbar-color: white transparent
+
+    input
+        background: transparent
+        color: white
+        border: none
+        outline: none
+        flex-grow: 1
+        margin-top: auto
+
+    .cursor
+        height: 12px
+        width: 6px
+        position: relative
+        top: 1px
+        animation: blink 1s steps(1, end) infinite 
+        display: inline-block
+        margin-left: 2px
+        
+
+.line
+    display: flex
+    align-items: center
+    white-space: pre-wrap
+    width: 100%

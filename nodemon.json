@@ -1,5 +1,5 @@
 {
-    "verbose": true,
+    "verbose": false,
     "ignore": ["node_modules", ".next"],
     "watch": ["routes/*", "init.js", "terminal.js", "routes.js", "router.js"],
     "ext": "js json"

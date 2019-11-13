@@ -21,7 +21,7 @@ app.use('/api', require('./router')({ ws }))
 
 app.listen(6969)
 
-console.log('Initialized.')
+console.log('API initialized')
 
 
 // Next

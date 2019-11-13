@@ -7,8 +7,10 @@ module.exports = async ({ ws }) => {
 
         switch (type) {
             case 'cmd':
+                terminal = spawn('cmd')
                 break
             case 'powershell':
+                terminal = spawn('powershell')
                 break
             
             case 'ubuntu':
@@ -18,29 +20,31 @@ module.exports = async ({ ws }) => {
 
         client.terminal = terminal
 
-        const send = data => client.send(JSON.stringify(data))
+        const send = data => {
+            client.send(JSON.stringify(data))
+        }
 
-        terminal.stdout.on('data', message => send({ type: 'output', message }))
-        terminal.stderr.on('data', message => send({ type: 'output', message }))
-        terminal.on('close', () => send({ type: 'closed' }))
+        terminal.stdout.on('data', message => send([ 'output', message.toString('utf8') ]))
+        terminal.stderr.on('data', message => send([ 'output', message.toString('utf8') ]))
+        terminal.on('close', () => send([ 'closed' ]))
     }
 
     const write = (client, input) => {
-        client.terminal.write(`${input}\n`)
+        console.log(input)
+        client.terminal.stdin.write(`${input}\n`)
     }
 
     ws.on('connection', client =>
         client.on('message', unparsed => {
-            try {
-                const { event, message } = JSON.parse(unparsed) 
-                switch (event) {
-                    case 'spawn':
-                        return terminal(client, message)
+            const [ event, message ] = JSON.parse(unparsed) 
 
-                    case 'write':
-                        return write(client, message)
-                }
-            } catch { return console.error('[terminal] Parse Error') }
+            switch (event) {
+                case 'spawn':
+                    return terminal(client, message)
+
+                case 'write':
+                    return write(client, message)
+            }
         })
     )
 }
